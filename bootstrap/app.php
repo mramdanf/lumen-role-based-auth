@@ -59,9 +59,13 @@ $app = new Laravel\Lumen\Application(
     realpath(__DIR__.'/../')
 );
 
-$app->withFacades();
+$app->withFacades([
+    Zizaco\Entrust\EntrustFacade::class => 'Entrust',
+]);
 
 $app->withEloquent();
+
+$app->configure('entrust');
 
 /*
 |--------------------------------------------------------------------------
@@ -96,11 +100,12 @@ $app->singleton(
 */
 
 $app->middleware([
-   App\Http\Middleware\CORSMiddleware::class
+   App\Http\Middleware\CORSMiddleware::class,
+   App\Http\Middleware\JsonRequestMiddleware::class
 ]);
 
 $app->routeMiddleware([
-    // 'auth' => App\Http\Middleware\Authenticate::class,
+    'ability' => App\Http\Middleware\TokenEntrustAbility::class,
 ]);
 
 /*
@@ -126,6 +131,8 @@ $app->register(Zeek\LumenDingoAdapter\Providers\LumenDingoAdapterServiceProvider
 $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 $app->register(Widnyana\LDRoutesList\CommandServiceProvider::class);
 
+// Register Service providers for Entrust
+$app->register(Zizaco\Entrust\EntrustServiceProvider::class);
 /*
 |--------------------------------------------------------------------------
 | Load The Application Routes
