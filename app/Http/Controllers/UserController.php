@@ -20,7 +20,7 @@ class UserController extends Controller
     {
         $req = $request->all();
 
-        $user = User::find($req['user_id'])->first();
+        $user = User::find($req['user_id']);
         $roles = $req['roles'] ? $req['roles'] : '';
         $permissions = $req['permissions'] ? $req['permissions'] : '';
         

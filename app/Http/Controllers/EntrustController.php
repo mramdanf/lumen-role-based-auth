@@ -73,9 +73,9 @@ class EntrustController extends Controller
         $req = $request->all();
 
         $role = Role::find($req['role_id']);
-        $permission = Role::find($req['permission_id']);
+        $permission = Permission::find($req['permission_id']);
 
-        $role->attachPermission($role);
+        $role->attachPermission($permission);
 
         return response([
             'message' => 'Assign permission to role success'
