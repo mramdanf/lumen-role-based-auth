@@ -21,14 +21,15 @@ class UserController extends Controller
         $req = $request->all();
 
         $user = User::find($req['user_id'])->first();
-        $type = $req['type'];
+        $roles = $req['roles'] ? $req['roles'] : '';
+        $permissions = $req['permissions'] ? $req['permissions'] : '';
         
         $abilityOpt = array(
             'validate_all' => false,
-            // 'return_type' => 'both'
+            'return_type' => 'both',
         );
         return response([
-            'data' => $type === 'role' ? $user->ability($req['value'], '', $abilityOpt) : $user->ability('', $req['value'], $abilityOpt)
+            'data' => $user->ability($roles, $permissions, $abilityOpt)
         ]);
     }
 }
