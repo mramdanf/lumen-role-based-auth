@@ -37,7 +37,7 @@ class TokenEntrustAbility extends BaseMiddleware
         }
 
         if (!$request->user()->ability(explode('|', $roles), explode('|', $permissions), array('validate_all' => $validateAll))) {
-            return $this->respond('tymon.jwt.invalid', 'Anda tidak berhak mengakses resources ini', 401, 'Unauthorized');
+            return $this->respond('tymon.jwt.invalid', 'Unauthorized access', 401, 'Unauthorized');
         }
 
 

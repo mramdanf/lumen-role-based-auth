@@ -11,39 +11,26 @@
 |
 */
 
-$app->post('role/create', 'EntrustController@createRole');
-$app->get('role/list', 'EntrustController@listRole');
-$app->post('permission/create', 'EntrustController@createPermission');
-$app->get('permission/list', 'EntrustController@listPermission');
-$app->post('assign-user-role', 'EntrustController@assignUserRole');
-$app->post('assign-role-permission', 'EntrustController@assignRolePermission');
-$app->get('user/list', 'UserController@list');
-$app->post('user/check-ability', 'UserController@checkAbility');
-
 $api = $app->make(Dingo\Api\Routing\Router::class);
 
 $api->version('v1', function ($api) {
+    // Login
+    $api->post('/auth/login', 'App\Http\Controllers\Auth\AuthController@postLogin');
 
-    // Auth JWT
-    $api->post('/auth/login', [
-        'as' => 'api.auth.login',
-        'uses' => 'App\Http\Controllers\Auth\AuthController@postLogin',
-    ]);
-    $api->group([
-        'namespace' => 'App\Http\Controllers\Auth',
-        'middleware' => 'api.auth'
-    ], function ($api) {
-        $api->get('/auth/user', 'AuthController@getUser');
-        $api->patch('/auth/refresh', 'AuthController@patchRefresh');
-        $api->delete('/auth/invalidate', 'AuthController@deleteInvalidate');
-    });
-
-
-    // API
+    // Only for admin
     $api->group([
         'namespace' => 'App\Http\Controllers',
-        'middleware' => 'api.auth',
-    ], function ($api) {
-        $api->get('/', 'APIController@getIndex');
+        'middleware' => ['ability:,admin'],
+    ], function($api) {
+        $api->get('user/list', 'UserController@list');
+        $api->post('user/check-ability', 'UserController@checkAbility');
+        
+        $api->post('role/create', 'EntrustController@createRole');
+        $api->get('role/list', 'EntrustController@listRole');
+        $api->post('permission/create', 'EntrustController@createPermission');
+        $api->get('permission/list', 'EntrustController@listPermission');
+        $api->post('assign-user-role', 'EntrustController@assignUserRole');
+        $api->post('assign-role-permission', 'EntrustController@assignRolePermission');
     });
+    
 });
