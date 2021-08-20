@@ -37,7 +37,7 @@ Set `JWT_SECRET` in `.env` to string that generated using `php artisan jwt:gener
 
 Run `php artisan migrate --seed`
 
-Download postman collection [here](https://www.getpostman.com/collections/a0cbef49138b98fecfe1)
+Download postman collection [here](https://www.getpostman.com/collections/a0cbef49138b98fecfe1) please see `routes/api.php` and play around with the postman collection for role based auth
 
 ## References
 
